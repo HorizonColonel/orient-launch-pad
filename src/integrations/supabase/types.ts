@@ -9,16 +9,226 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      companies: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      employee_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          employee_id: string
+          id: string
+          module_id: string
+          progress_percentage: number | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["progress_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          employee_id: string
+          id?: string
+          module_id: string
+          progress_percentage?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["progress_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          employee_id?: string
+          id?: string
+          module_id?: string
+          progress_percentage?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["progress_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employee_progress_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_progress_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "training_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orientation: {
+        Row: {
+          created_at: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      training_materials: {
+        Row: {
+          file_name: string
+          file_size: number | null
+          file_url: string
+          id: string
+          module_id: string
+          type: Database["public"]["Enums"]["material_type"]
+          uploaded_at: string | null
+        }
+        Insert: {
+          file_name: string
+          file_size?: number | null
+          file_url: string
+          id?: string
+          module_id: string
+          type: Database["public"]["Enums"]["material_type"]
+          uploaded_at?: string | null
+        }
+        Update: {
+          file_name?: string
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          module_id?: string
+          type?: Database["public"]["Enums"]["material_type"]
+          uploaded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_materials_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "training_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      training_modules: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_modules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_profiles: {
+        Row: {
+          company_id: string | null
+          created_at: string | null
+          email: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          role: Database["public"]["Enums"]["user_role"]
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string | null
+          email: string
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string | null
+          email?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_company_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      get_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      is_company_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      material_type: "pdf" | "video" | "image" | "document"
+      progress_status: "not_started" | "in_progress" | "completed"
+      user_role: "company_admin" | "employee"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +343,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      material_type: ["pdf", "video", "image", "document"],
+      progress_status: ["not_started", "in_progress", "completed"],
+      user_role: ["company_admin", "employee"],
+    },
   },
 } as const

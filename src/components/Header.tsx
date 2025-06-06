@@ -1,11 +1,25 @@
 
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, profile, signOut, loading } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
@@ -28,14 +42,52 @@ const Header = () => {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" className="border-primary text-primary hover:bg-primary/5">
-              Sign In
-            </Button>
-            <Link to="/request-demo">
-              <Button className="bg-primary hover:bg-primary/90">
-                Request Demo
-              </Button>
-            </Link>
+            {!loading && (
+              <>
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="flex items-center space-x-2">
+                        <User className="w-4 h-4" />
+                        <span>{profile?.first_name || profile?.email}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>
+                        <div className="flex flex-col space-y-1">
+                          <p className="text-sm font-medium">
+                            {profile?.first_name && profile?.last_name 
+                              ? `${profile.first_name} ${profile.last_name}`
+                              : profile?.email}
+                          </p>
+                          <p className="text-xs text-gray-500 capitalize">
+                            {profile?.role?.replace('_', ' ')}
+                          </p>
+                        </div>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Sign Out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <>
+                    <Link to="/auth">
+                      <Button variant="outline" className="border-primary text-primary hover:bg-primary/5">
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link to="/request-demo">
+                      <Button className="bg-primary hover:bg-primary/90">
+                        Request Demo
+                      </Button>
+                    </Link>
+                  </>
+                )}
+              </>
+            )}
           </div>
 
           <button
@@ -53,16 +105,44 @@ const Header = () => {
               <Link to="/benefits" className="text-gray-600 hover:text-gray-900 transition-colors">Benefits</Link>
               <Link to="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
               <Link to="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</Link>
-              <div className="flex flex-col space-y-2 pt-4 border-t border-gray-200">
-                <Button variant="outline" className="border-primary text-primary hover:bg-primary/5">
-                  Sign In
-                </Button>
-                <Link to="/request-demo">
-                  <Button className="bg-primary hover:bg-primary/90 w-full">
-                    Request Demo
-                  </Button>
-                </Link>
-              </div>
+              
+              {!loading && (
+                <div className="flex flex-col space-y-2 pt-4 border-t border-gray-200">
+                  {user ? (
+                    <>
+                      <div className="text-sm text-gray-600">
+                        {profile?.first_name && profile?.last_name 
+                          ? `${profile.first_name} ${profile.last_name}`
+                          : profile?.email}
+                        <span className="block text-xs capitalize">
+                          {profile?.role?.replace('_', ' ')}
+                        </span>
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        className="border-red-200 text-red-600 hover:bg-red-50" 
+                        onClick={handleSignOut}
+                      >
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/auth">
+                        <Button variant="outline" className="border-primary text-primary hover:bg-primary/5 w-full">
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link to="/request-demo">
+                        <Button className="bg-primary hover:bg-primary/90 w-full">
+                          Request Demo
+                        </Button>
+                      </Link>
+                    </>
+                  )}
+                </div>
+              )}
             </nav>
           </div>
         )}
