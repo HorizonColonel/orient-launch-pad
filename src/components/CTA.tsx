@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTA = () => {
   return (
@@ -18,13 +19,17 @@ const CTA = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-primary hover:bg-gray-50 text-lg px-8 py-4 font-semibold">
-                Start Free Trial
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8 py-4 font-semibold">
-                Request Demo
-              </Button>
+              <Link to="/start-trial">
+                <Button size="lg" className="bg-white text-primary hover:bg-gray-50 text-lg px-8 py-4 font-semibold">
+                  Start Free Trial
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+              <Link to="/request-demo">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8 py-4 font-semibold">
+                  Request Demo
+                </Button>
+              </Link>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 pt-8">

@@ -1,5 +1,6 @@
 
 import { Mail, Phone, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -8,12 +9,12 @@ const Footer = () => {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
-              <div className="flex items-center space-x-2">
+              <Link to="/" className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">O</span>
                 </div>
                 <span className="font-bold text-xl">orientation.com.tr</span>
-              </div>
+              </Link>
               <p className="text-gray-400 leading-relaxed">
                 Empowering HR teams with comprehensive onboarding solutions for better employee experiences.
               </p>
@@ -36,8 +37,8 @@ const Footer = () => {
             <div className="space-y-4">
               <h3 className="font-semibold text-lg">Product</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+                <li><Link to="/features" className="text-gray-400 hover:text-white transition-colors">Features</Link></li>
+                <li><Link to="/pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</Link></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Integrations</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Security</a></li>
               </ul>
@@ -56,7 +57,7 @@ const Footer = () => {
             <div className="space-y-4">
               <h3 className="font-semibold text-lg">Company</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
