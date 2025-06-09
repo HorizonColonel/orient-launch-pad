@@ -40,7 +40,6 @@ const ProfileInfo = () => {
       });
       
       setIsEditing(false);
-      // The auth context will automatically refresh the profile
     } catch (error: any) {
       toast({
         title: "Error updating profile",
@@ -98,6 +97,8 @@ const ProfileInfo = () => {
     });
   };
 
+  const isCompanyAdmin = profile?.role === 'company_admin';
+
   if (!profile) {
     return (
       <Card>
@@ -109,136 +110,139 @@ const ProfileInfo = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            Profile Information
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          Profile Information
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsEditing(!isEditing)}
+            disabled={updating}
+          >
+            <Edit className="w-4 h-4 mr-2" />
+            {isEditing ? 'Cancel' : 'Edit'}
+          </Button>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="flex items-center space-x-6">
+          <div className="relative">
+            <Avatar className="w-24 h-24">
+              <AvatarImage src="" alt={profile.first_name || 'User'} />
+              <AvatarFallback className="text-xl">{getInitials()}</AvatarFallback>
+            </Avatar>
+            <label className="absolute bottom-0 right-0 cursor-pointer">
+              <div className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full p-2">
+                <Upload className="w-4 h-4" />
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileUpload}
+                disabled={uploading}
+              />
+            </label>
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold">
+              {profile.first_name && profile.last_name
+                ? `${profile.first_name} ${profile.last_name}`
+                : profile.email}
+            </h3>
+            <p className="text-muted-foreground capitalize">
+              {profile.role?.replace('_', ' ')}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="firstName">First Name</Label>
+            {isEditing ? (
+              <Input
+                id="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="Enter first name"
+              />
+            ) : (
+              <div className="p-3 bg-muted rounded-md">
+                {profile.first_name || 'Not provided'}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="lastName">Last Name</Label>
+            {isEditing ? (
+              <Input
+                id="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Enter last name"
+              />
+            ) : (
+              <div className="p-3 bg-muted rounded-md">
+                {profile.last_name || 'Not provided'}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label>Email</Label>
+            <div className="p-3 bg-muted rounded-md text-muted-foreground">
+              {profile.email}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Role</Label>
+            <div className="p-3 bg-muted rounded-md text-muted-foreground capitalize">
+              {profile.role?.replace('_', ' ')}
+            </div>
+          </div>
+
+          {/* Show company and created_at only for company admins */}
+          {isCompanyAdmin && (
+            <>
+              <div className="space-y-2">
+                <Label>Company ID</Label>
+                <div className="p-3 bg-muted rounded-md text-muted-foreground">
+                  {profile.company_id || 'No company assigned'}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Member Since</Label>
+                <div className="p-3 bg-muted rounded-md text-muted-foreground">
+                  {formatDate(profile.created_at)}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        {isEditing && (
+          <div className="flex justify-end space-x-2">
             <Button
               variant="outline"
-              size="sm"
-              onClick={() => setIsEditing(!isEditing)}
+              onClick={() => setIsEditing(false)}
               disabled={updating}
             >
-              <Edit className="w-4 h-4 mr-2" />
-              {isEditing ? 'Cancel' : 'Edit'}
+              Cancel
             </Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="flex items-center space-x-6">
-            <div className="relative">
-              <Avatar className="w-24 h-24">
-                <AvatarImage src="" alt={profile.first_name || 'User'} />
-                <AvatarFallback className="text-xl">{getInitials()}</AvatarFallback>
-              </Avatar>
-              <label className="absolute bottom-0 right-0 cursor-pointer">
-                <div className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full p-2">
-                  <Upload className="w-4 h-4" />
-                </div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleFileUpload}
-                  disabled={uploading}
-                />
-              </label>
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold">
-                {profile.first_name && profile.last_name
-                  ? `${profile.first_name} ${profile.last_name}`
-                  : profile.email}
-              </h3>
-              <p className="text-muted-foreground capitalize">
-                {profile.role?.replace('_', ' ')}
-              </p>
-            </div>
+            <Button
+              onClick={handleUpdateProfile}
+              disabled={updating}
+            >
+              {updating ? 'Updating...' : 'Save Changes'}
+            </Button>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              {isEditing ? (
-                <Input
-                  id="firstName"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="Enter first name"
-                />
-              ) : (
-                <div className="p-3 bg-muted rounded-md">
-                  {profile.first_name || 'Not provided'}
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              {isEditing ? (
-                <Input
-                  id="lastName"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Enter last name"
-                />
-              ) : (
-                <div className="p-3 bg-muted rounded-md">
-                  {profile.last_name || 'Not provided'}
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label>Email</Label>
-              <div className="p-3 bg-muted rounded-md text-muted-foreground">
-                {profile.email}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Role</Label>
-              <div className="p-3 bg-muted rounded-md text-muted-foreground capitalize">
-                {profile.role?.replace('_', ' ')}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Company</Label>
-              <div className="p-3 bg-muted rounded-md text-muted-foreground">
-                {profile.company_id || 'No company assigned'}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Member Since</Label>
-              <div className="p-3 bg-muted rounded-md text-muted-foreground">
-                {formatDate(profile.created_at)}
-              </div>
-            </div>
-          </div>
-
-          {isEditing && (
-            <div className="flex justify-end space-x-2">
-              <Button
-                variant="outline"
-                onClick={() => setIsEditing(false)}
-                disabled={updating}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleUpdateProfile}
-                disabled={updating}
-              >
-                {updating ? 'Updating...' : 'Save Changes'}
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

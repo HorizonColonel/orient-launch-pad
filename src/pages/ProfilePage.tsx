@@ -3,7 +3,8 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 import Header from '@/components/Header';
-import ProfileTabs from '@/components/profile/ProfileTabs';
+import ProfileSidebar from '@/components/profile/ProfileSidebar';
+import ProfileContent from '@/components/profile/ProfileContent';
 
 const ProfilePage = () => {
   const { user, loading } = useAuth();
@@ -25,9 +26,19 @@ const ProfilePage = () => {
       <Header />
       <main className="pt-16">
         <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-7xl mx-auto">
             <h1 className="text-3xl font-bold text-foreground mb-8">My Profile</h1>
-            <ProfileTabs />
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Left Column - Vertical Tabs */}
+              <div className="lg:col-span-1">
+                <ProfileSidebar />
+              </div>
+              
+              {/* Right Column - Content */}
+              <div className="lg:col-span-3">
+                <ProfileContent />
+              </div>
+            </div>
           </div>
         </div>
       </main>
