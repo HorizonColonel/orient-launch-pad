@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, LogOut } from "lucide-react";
+import { Menu, X, User, LogOut, Building2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -72,6 +72,14 @@ const Header = () => {
                           My Profile
                         </Link>
                       </DropdownMenuItem>
+                      {(profile?.role === 'company_admin' || profile?.role === 'employee') && profile?.company_id && (
+                        <DropdownMenuItem asChild>
+                          <Link to="/company" className="cursor-pointer">
+                            <Building2 className="w-4 h-4 mr-2" />
+                            My Company
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
                         <LogOut className="w-4 h-4 mr-2" />
@@ -131,6 +139,14 @@ const Header = () => {
                           My Profile
                         </Button>
                       </Link>
+                      {(profile?.role === 'company_admin' || profile?.role === 'employee') && profile?.company_id && (
+                        <Link to="/company">
+                          <Button variant="outline" className="w-full justify-start">
+                            <Building2 className="w-4 h-4 mr-2" />
+                            My Company
+                          </Button>
+                        </Link>
+                      )}
                       <Button 
                         variant="outline" 
                         className="border-red-200 text-red-600 hover:bg-red-50" 
