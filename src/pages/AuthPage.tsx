@@ -8,7 +8,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2 } from 'lucide-react';
+import PrivacyPolicyModal from '@/components/PrivacyPolicyModal';
+import TermsOfServiceModal from '@/components/TermsOfServiceModal';
 
 const AuthPage = () => {
   const { signIn, signUp, user, loading } = useAuth();
@@ -26,6 +29,11 @@ const AuthPage = () => {
   const [signUpPassword, setSignUpPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
+  // Modal states
+  const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
+  const [termsModalOpen, setTermsModalOpen] = useState(false);
 
   useEffect(() => {
     if (user && !loading) {
@@ -53,6 +61,12 @@ const AuthPage = () => {
     setError(null);
     setSuccess(null);
 
+    if (!acceptedTerms) {
+      setError('You must accept the Privacy Policy and Terms of Service to create an account.');
+      setIsLoading(false);
+      return;
+    }
+
     const { error } = await signUp(signUpEmail, signUpPassword, firstName, lastName);
     
     if (error) {
@@ -73,144 +87,188 @@ const AuthPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Welcome to orientation.com.tr
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Employee onboarding made simple
-          </p>
+    <>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div className="text-center">
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+              Welcome to orientation.com.tr
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Employee onboarding made simple
+            </p>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Access Your Account</CardTitle>
+              <CardDescription>
+                Sign in to your existing account or create a new one
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="signin" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="signin">Sign In</TabsTrigger>
+                  <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="signin">
+                  <form onSubmit={handleSignIn} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="signin-email">Email</Label>
+                      <Input
+                        id="signin-email"
+                        type="email"
+                        value={signInEmail}
+                        onChange={(e) => setSignInEmail(e.target.value)}
+                        required
+                        placeholder="Enter your email"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signin-password">Password</Label>
+                      <Input
+                        id="signin-password"
+                        type="password"
+                        value={signInPassword}
+                        onChange={(e) => setSignInPassword(e.target.value)}
+                        required
+                        placeholder="Enter your password"
+                      />
+                    </div>
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Signing In...
+                        </>
+                      ) : (
+                        'Sign In'
+                      )}
+                    </Button>
+                  </form>
+                </TabsContent>
+
+                <TabsContent value="signup">
+                  <form onSubmit={handleSignUp} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="firstName">First Name</Label>
+                        <Input
+                          id="firstName"
+                          type="text"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          placeholder="First name"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="lastName">Last Name</Label>
+                        <Input
+                          id="lastName"
+                          type="text"
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          placeholder="Last name"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-email">Email</Label>
+                      <Input
+                        id="signup-email"
+                        type="email"
+                        value={signUpEmail}
+                        onChange={(e) => setSignUpEmail(e.target.value)}
+                        required
+                        placeholder="Enter your email"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-password">Password</Label>
+                      <Input
+                        id="signup-password"
+                        type="password"
+                        value={signUpPassword}
+                        onChange={(e) => setSignUpPassword(e.target.value)}
+                        required
+                        placeholder="Create a password"
+                        minLength={6}
+                      />
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="flex items-start space-x-3">
+                        <Checkbox
+                          id="accept-terms"
+                          checked={acceptedTerms}
+                          onCheckedChange={(checked) => setAcceptedTerms(checked as boolean)}
+                          className="mt-1"
+                        />
+                        <div className="text-sm">
+                          <label htmlFor="accept-terms" className="text-gray-700 cursor-pointer">
+                            I have read and understood the{' '}
+                            <button
+                              type="button"
+                              onClick={() => setPrivacyModalOpen(true)}
+                              className="text-primary hover:underline"
+                            >
+                              Privacy Policy
+                            </button>
+                            {' '}and{' '}
+                            <button
+                              type="button"
+                              onClick={() => setTermsModalOpen(true)}
+                              className="text-primary hover:underline"
+                            >
+                              Terms of Service
+                            </button>
+                            .
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Button type="submit" className="w-full" disabled={isLoading || !acceptedTerms}>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Creating Account...
+                        </>
+                      ) : (
+                        'Create Account'
+                      )}
+                    </Button>
+                  </form>
+                </TabsContent>
+              </Tabs>
+
+              {error && (
+                <Alert className="mt-4 border-red-200 bg-red-50">
+                  <AlertDescription className="text-red-800">{error}</AlertDescription>
+                </Alert>
+              )}
+
+              {success && (
+                <Alert className="mt-4 border-green-200 bg-green-50">
+                  <AlertDescription className="text-green-800">{success}</AlertDescription>
+                </Alert>
+              )}
+            </CardContent>
+          </Card>
         </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Access Your Account</CardTitle>
-            <CardDescription>
-              Sign in to your existing account or create a new one
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="signin" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="signin">
-                <form onSubmit={handleSignIn} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signin-email">Email</Label>
-                    <Input
-                      id="signin-email"
-                      type="email"
-                      value={signInEmail}
-                      onChange={(e) => setSignInEmail(e.target.value)}
-                      required
-                      placeholder="Enter your email"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signin-password">Password</Label>
-                    <Input
-                      id="signin-password"
-                      type="password"
-                      value={signInPassword}
-                      onChange={(e) => setSignInPassword(e.target.value)}
-                      required
-                      placeholder="Enter your password"
-                    />
-                  </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Signing In...
-                      </>
-                    ) : (
-                      'Sign In'
-                    )}
-                  </Button>
-                </form>
-              </TabsContent>
-
-              <TabsContent value="signup">
-                <form onSubmit={handleSignUp} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input
-                        id="firstName"
-                        type="text"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        placeholder="First name"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input
-                        id="lastName"
-                        type="text"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        placeholder="Last name"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
-                    <Input
-                      id="signup-email"
-                      type="email"
-                      value={signUpEmail}
-                      onChange={(e) => setSignUpEmail(e.target.value)}
-                      required
-                      placeholder="Enter your email"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
-                    <Input
-                      id="signup-password"
-                      type="password"
-                      value={signUpPassword}
-                      onChange={(e) => setSignUpPassword(e.target.value)}
-                      required
-                      placeholder="Create a password"
-                      minLength={6}
-                    />
-                  </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Creating Account...
-                      </>
-                    ) : (
-                      'Create Account'
-                    )}
-                  </Button>
-                </form>
-              </TabsContent>
-            </Tabs>
-
-            {error && (
-              <Alert className="mt-4 border-red-200 bg-red-50">
-                <AlertDescription className="text-red-800">{error}</AlertDescription>
-              </Alert>
-            )}
-
-            {success && (
-              <Alert className="mt-4 border-green-200 bg-green-50">
-                <AlertDescription className="text-green-800">{success}</AlertDescription>
-              </Alert>
-            )}
-          </CardContent>
-        </Card>
       </div>
-    </div>
+
+      <PrivacyPolicyModal 
+        open={privacyModalOpen} 
+        onOpenChange={setPrivacyModalOpen} 
+      />
+      <TermsOfServiceModal 
+        open={termsModalOpen} 
+        onOpenChange={setTermsModalOpen} 
+      />
+    </>
   );
 };
 
