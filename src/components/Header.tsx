@@ -66,6 +66,13 @@ const Header = () => {
                         </div>
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/profile" className="cursor-pointer">
+                          <User className="w-4 h-4 mr-2" />
+                          My Profile
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
                         <LogOut className="w-4 h-4 mr-2" />
                         Sign Out
@@ -118,6 +125,12 @@ const Header = () => {
                           {profile?.role?.replace('_', ' ')}
                         </span>
                       </div>
+                      <Link to="/profile">
+                        <Button variant="outline" className="w-full justify-start">
+                          <User className="w-4 h-4 mr-2" />
+                          My Profile
+                        </Button>
+                      </Link>
                       <Button 
                         variant="outline" 
                         className="border-red-200 text-red-600 hover:bg-red-50" 

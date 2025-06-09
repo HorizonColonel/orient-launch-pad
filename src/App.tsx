@@ -16,6 +16,7 @@ import WatchDemoPage from "./pages/WatchDemoPage";
 import ScheduleDemoPage from "./pages/ScheduleDemoPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import AuthPage from "./pages/AuthPage";
+import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/features" element={<FeaturesPage />} />
             <Route path="/benefits" element={<BenefitsPage />} />
             <Route path="/pricing" element={<PricingPage />} />
