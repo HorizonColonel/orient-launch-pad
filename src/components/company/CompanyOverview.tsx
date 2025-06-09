@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,10 +9,10 @@ import { Users, BookOpen, CheckCircle, Clock, TrendingUp } from 'lucide-react';
 interface Company {
   id: string;
   name: string;
-  logo_url: string | null;
-  description: string | null;
-  mission: string | null;
   created_at: string | null;
+  logo_url?: string | null;
+  description?: string | null;
+  mission?: string | null;
 }
 
 interface CompanyOverviewProps {

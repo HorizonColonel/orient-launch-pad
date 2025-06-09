@@ -12,10 +12,10 @@ import { Building2, Save, Upload } from 'lucide-react';
 interface Company {
   id: string;
   name: string;
-  logo_url: string | null;
-  description: string | null;
-  mission: string | null;
   created_at: string | null;
+  logo_url?: string | null;
+  description?: string | null;
+  mission?: string | null;
 }
 
 interface CompanySettingsProps {

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -14,10 +13,10 @@ import CompanySettings from './CompanySettings';
 interface Company {
   id: string;
   name: string;
-  logo_url: string | null;
-  description: string | null;
-  mission: string | null;
   created_at: string | null;
+  logo_url?: string | null;
+  description?: string | null;
+  mission?: string | null;
 }
 
 const CompanyDashboard = () => {
