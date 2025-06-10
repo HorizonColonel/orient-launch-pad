@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, LogOut, Building2 } from "lucide-react";
+import { Menu, X, User, LogOut, Building2, BookOpen } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -66,6 +66,12 @@ const Header = () => {
                         </div>
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/my-training" className="cursor-pointer">
+                          <BookOpen className="w-4 h-4 mr-2" />
+                          My Training
+                        </Link>
+                      </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link to="/profile" className="cursor-pointer">
                           <User className="w-4 h-4 mr-2" />
@@ -133,6 +139,12 @@ const Header = () => {
                           {profile?.role?.replace('_', ' ')}
                         </span>
                       </div>
+                      <Link to="/my-training">
+                        <Button variant="outline" className="w-full justify-start">
+                          <BookOpen className="w-4 h-4 mr-2" />
+                          My Training
+                        </Button>
+                      </Link>
                       <Link to="/profile">
                         <Button variant="outline" className="w-full justify-start">
                           <User className="w-4 h-4 mr-2" />

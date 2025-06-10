@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -55,6 +56,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setTimeout(() => {
             fetchUserProfile(session.user.id);
           }, 0);
+          
+          // Redirect to My Training page after successful login
+          if (event === 'SIGNED_IN' && window.location.pathname === '/auth') {
+            window.location.href = '/my-training';
+          }
         } else {
           setProfile(null);
         }
@@ -108,7 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/my-training`;
     
     const { error } = await supabase.auth.signUp({
       email,
