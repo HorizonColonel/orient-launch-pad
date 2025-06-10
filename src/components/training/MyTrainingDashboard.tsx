@@ -6,7 +6,8 @@ import TrainingOverview from './TrainingOverview';
 import ActiveTrainings from './ActiveTrainings';
 import CompletedTrainings from './CompletedTrainings';
 import TrainingAssignments from './TrainingAssignments';
-import { BookOpen, Clock, CheckCircle, Users } from 'lucide-react';
+import TrainingManagementPanel from './TrainingManagementPanel';
+import { BookOpen, Clock, CheckCircle, Users, Settings } from 'lucide-react';
 
 const MyTrainingDashboard = () => {
   const { profile, isCompanyAdmin } = useAuth();
@@ -28,7 +29,7 @@ const MyTrainingDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-4">
+          <TabsList className={`grid w-full ${isCompanyAdmin ? 'grid-cols-5' : 'grid-cols-3'} lg:${isCompanyAdmin ? 'grid-cols-5' : 'grid-cols-3'}`}>
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BookOpen className="w-4 h-4" />
               <span className="hidden sm:inline">Overview</span>
@@ -42,10 +43,16 @@ const MyTrainingDashboard = () => {
               <span className="hidden sm:inline">Completed</span>
             </TabsTrigger>
             {isCompanyAdmin && (
-              <TabsTrigger value="assignments" className="flex items-center gap-2">
-                <Users className="w-4 h-4" />
-                <span className="hidden sm:inline">Assignments</span>
-              </TabsTrigger>
+              <>
+                <TabsTrigger value="assignments" className="flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  <span className="hidden sm:inline">Assignments</span>
+                </TabsTrigger>
+                <TabsTrigger value="management" className="flex items-center gap-2">
+                  <Settings className="w-4 h-4" />
+                  <span className="hidden sm:inline">Management</span>
+                </TabsTrigger>
+              </>
             )}
           </TabsList>
 
@@ -62,9 +69,15 @@ const MyTrainingDashboard = () => {
           </TabsContent>
 
           {isCompanyAdmin && (
-            <TabsContent value="assignments" className="mt-6">
-              <TrainingAssignments />
-            </TabsContent>
+            <>
+              <TabsContent value="assignments" className="mt-6">
+                <TrainingAssignments />
+              </TabsContent>
+              
+              <TabsContent value="management" className="mt-6">
+                <TrainingManagementPanel />
+              </TabsContent>
+            </>
           )}
         </Tabs>
       </div>

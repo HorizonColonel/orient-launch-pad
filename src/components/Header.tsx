@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, LogOut, Building2, BookOpen } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   DropdownMenu,
@@ -16,6 +16,10 @@ import {
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, profile, signOut, loading } = useAuth();
+  const location = useLocation();
+
+  // Hide navigation items on My Training page
+  const shouldShowNavigation = !location.pathname.includes('/my-training');
 
   const handleSignOut = async () => {
     await signOut();
@@ -34,12 +38,14 @@ const Header = () => {
             </Link>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</Link>
-            <Link to="/benefits" className="text-gray-600 hover:text-gray-900 transition-colors">Benefits</Link>
-            <Link to="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
-            <Link to="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</Link>
-          </nav>
+          {shouldShowNavigation && (
+            <nav className="hidden md:flex items-center space-x-8">
+              <Link to="/features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</Link>
+              <Link to="/benefits" className="text-gray-600 hover:text-gray-900 transition-colors">Benefits</Link>
+              <Link to="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
+              <Link to="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</Link>
+            </nav>
+          )}
 
           <div className="hidden md:flex items-center space-x-4">
             {!loading && (
@@ -122,10 +128,14 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden absolute top-16 left-0 right-0 bg-white border-b border-gray-200 shadow-lg">
             <nav className="flex flex-col space-y-4 p-4">
-              <Link to="/features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</Link>
-              <Link to="/benefits" className="text-gray-600 hover:text-gray-900 transition-colors">Benefits</Link>
-              <Link to="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
-              <Link to="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</Link>
+              {shouldShowNavigation && (
+                <>
+                  <Link to="/features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</Link>
+                  <Link to="/benefits" className="text-gray-600 hover:text-gray-900 transition-colors">Benefits</Link>
+                  <Link to="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
+                  <Link to="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</Link>
+                </>
+              )}
               
               {!loading && (
                 <div className="flex flex-col space-y-2 pt-4 border-t border-gray-200">

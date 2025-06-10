@@ -4,7 +4,7 @@ import { useEmployeeProgress } from '@/hooks/useEmployeeProgress';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { BookOpen, Clock, CheckCircle, TrendingUp, Calendar, Users } from 'lucide-react';
+import { BookOpen, Clock, CheckCircle, TrendingUp, Calendar, Users, AlertTriangle, Target } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const TrainingOverview = () => {
@@ -35,6 +35,11 @@ const TrainingOverview = () => {
   const notStartedCount = progress.filter(p => p.status === 'not_started').length;
   const overallProgress = totalModules > 0 ? Math.round((completedCount / totalModules) * 100) : 0;
 
+  // Calculate additional admin metrics
+  const avgProgressPercentage = progress.length > 0 
+    ? Math.round(progress.reduce((sum, p) => sum + (p.progress_percentage || 0), 0) / progress.length)
+    : 0;
+
   const recentActivity = progress
     .filter(p => p.updated_at)
     .sort((a, b) => new Date(b.updated_at!).getTime() - new Date(a.updated_at!).getTime())
@@ -44,9 +49,30 @@ const TrainingOverview = () => {
     .filter(p => p.status !== 'completed')
     .slice(0, 3);
 
+  // Admin-specific metrics
+  const employeeStats = isCompanyAdmin ? progress.reduce((acc, p) => {
+    const employeeName = p.employee_name || 'Unknown';
+    if (!acc[employeeName]) {
+      acc[employeeName] = { total: 0, completed: 0, inProgress: 0 };
+    }
+    acc[employeeName].total++;
+    if (p.status === 'completed') acc[employeeName].completed++;
+    if (p.status === 'in_progress') acc[employeeName].inProgress++;
+    return acc;
+  }, {} as Record<string, any>) : {};
+
+  const topPerformers = Object.entries(employeeStats)
+    .map(([name, stats]) => ({
+      name,
+      completionRate: stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0,
+      ...stats
+    }))
+    .sort((a, b) => b.completionRate - a.completionRate)
+    .slice(0, 5);
+
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
+      {/* Main Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -99,6 +125,51 @@ const TrainingOverview = () => {
         </Card>
       </div>
 
+      {/* Additional Admin Stats */}
+      {isCompanyAdmin && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Average Progress</CardTitle>
+              <Target className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{avgProgressPercentage}%</div>
+              <Progress value={avgProgressPercentage} className="mt-2" />
+              <p className="text-xs text-muted-foreground mt-2">
+                Across all assignments
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Not Started</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{notStartedCount}</div>
+              <p className="text-xs text-muted-foreground">
+                Require attention
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Employees</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{Object.keys(employeeStats).length}</div>
+              <p className="text-xs text-muted-foreground">
+                With assigned training
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
         <Card>
@@ -147,40 +218,65 @@ const TrainingOverview = () => {
           </CardContent>
         </Card>
 
-        {/* Quick Actions */}
+        {/* Top Performers or Next Steps */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              Next Steps
+              {isCompanyAdmin ? <TrendingUp className="h-5 w-5" /> : <Calendar className="h-5 w-5" />}
+              {isCompanyAdmin ? 'Top Performers' : 'Next Steps'}
             </CardTitle>
             <CardDescription>
-              Upcoming training modules
+              {isCompanyAdmin ? 'Employees with highest completion rates' : 'Upcoming training modules'}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {upcomingDeadlines.length === 0 ? (
-              <p className="text-sm text-muted-foreground">All caught up!</p>
+            {isCompanyAdmin ? (
+              topPerformers.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No employee data available</p>
+              ) : (
+                <div className="space-y-3">
+                  {topPerformers.map((performer, index) => (
+                    <div key={performer.name} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-medium">
+                          #{index + 1}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{performer.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {performer.completed}/{performer.total} completed
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-bold">{performer.completionRate}%</p>
+                        <Progress value={performer.completionRate} className="w-16 h-2" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )
             ) : (
-              <div className="space-y-3">
-                {upcomingDeadlines.map((item) => (
-                  <div key={item.id} className="border rounded-lg p-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium text-sm">{item.module_title}</h4>
-                      <Badge variant="outline">
-                        {item.status?.replace('_', ' ') || 'Not Started'}
-                      </Badge>
+              upcomingDeadlines.length === 0 ? (
+                <p className="text-sm text-muted-foreground">All caught up!</p>
+              ) : (
+                <div className="space-y-3">
+                  {upcomingDeadlines.map((item) => (
+                    <div key={item.id} className="border rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium text-sm">{item.module_title}</h4>
+                        <Badge variant="outline">
+                          {item.status?.replace('_', ' ') || 'Not Started'}
+                        </Badge>
+                      </div>
+                      <Progress value={item.progress_percentage || 0} className="mb-2" />
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>{item.progress_percentage || 0}% complete</span>
+                      </div>
                     </div>
-                    <Progress value={item.progress_percentage || 0} className="mb-2" />
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>{item.progress_percentage || 0}% complete</span>
-                      {isCompanyAdmin && item.employee_name && (
-                        <span>{item.employee_name}</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )
             )}
           </CardContent>
         </Card>
