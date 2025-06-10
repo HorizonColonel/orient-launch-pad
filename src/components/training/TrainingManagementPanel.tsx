@@ -19,7 +19,9 @@ import {
   UserPlus,
   Clock,
   Filter,
-  Search
+  Search,
+  User,
+  Building2
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
