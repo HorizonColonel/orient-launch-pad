@@ -6,10 +6,11 @@ import Benefits from "@/components/Benefits";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import PageTransition from "@/components/PageTransition";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <PageTransition>
       <Header />
       <Hero />
       <Features />
@@ -17,7 +18,7 @@ const Index = () => {
       <Testimonials />
       <CTA />
       <Footer />
-    </div>
+    </PageTransition>
   );
 };
 

@@ -5,15 +5,16 @@ import { Navigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import ProfileSidebar from '@/components/profile/ProfileSidebar';
 import ProfileContent from '@/components/profile/ProfileContent';
+import PageTransition from '@/components/PageTransition';
 
 const ProfilePage = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <PageTransition className="min-h-screen bg-background flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
+      </PageTransition>
     );
   }
 
@@ -22,7 +23,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <PageTransition className="min-h-screen bg-background">
       <Header />
       <main className="pt-16">
         <div className="container mx-auto px-4 py-8">
@@ -42,7 +43,7 @@ const ProfilePage = () => {
           </div>
         </div>
       </main>
-    </div>
+    </PageTransition>
   );
 };
 

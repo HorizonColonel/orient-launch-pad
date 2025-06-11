@@ -4,15 +4,16 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import CompanyDashboard from '@/components/company/CompanyDashboard';
+import PageTransition from '@/components/PageTransition';
 
 const CompanyPage = () => {
   const { user, profile, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <PageTransition className="min-h-screen bg-background flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
+      </PageTransition>
     );
   }
 
@@ -25,12 +26,12 @@ const CompanyPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <PageTransition className="min-h-screen bg-background">
       <Header />
       <main className="pt-16">
         <CompanyDashboard />
       </main>
-    </div>
+    </PageTransition>
   );
 };
 
