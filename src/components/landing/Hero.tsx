@@ -5,6 +5,13 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const Hero = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="home" className="pt-24 pb-16 lg:pt-32 lg:pb-24 bg-gradient-to-br from-blue-50 via-white to-blue-50 min-h-screen flex items-center">
       <div className="container mx-auto px-4 lg:px-6">
@@ -31,16 +38,17 @@ const Hero = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/start-trial">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 py-4 w-full sm:w-auto">
-                    Start Free Trial
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                </Link>
-                <Link to="/request-demo">
+                <button
+                  onClick={() => scrollToSection('request-demo')}
+                  className="inline-flex items-center justify-center rounded-md text-lg font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8 w-full sm:w-auto"
+                >
+                  Get Free Demo
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </button>
+                <Link to="/auth">
                   <Button size="lg" variant="outline" className="border-gray-300 text-lg px-8 py-4 w-full sm:w-auto">
                     <Play className="mr-2 w-5 h-5" />
-                    Request Demo
+                    Start Free Trial
                   </Button>
                 </Link>
               </div>
