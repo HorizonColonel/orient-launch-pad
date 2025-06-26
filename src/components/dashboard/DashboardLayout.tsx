@@ -13,7 +13,7 @@ const DashboardLayout = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
-        <SidebarInset>
+        <SidebarInset className="flex-1">
           <DashboardHeader />
           <main className="flex-1 overflow-auto">
             <Outlet />
