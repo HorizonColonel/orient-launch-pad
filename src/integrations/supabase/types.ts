@@ -78,6 +78,41 @@ export type Database = {
           },
         ]
       }
+      messages: {
+        Row: {
+          company_id: number
+          content: string
+          created_at: string
+          id: string
+          receiver_id: number
+          sender_id: number
+        }
+        Insert: {
+          company_id: number
+          content: string
+          created_at?: string
+          id: string
+          receiver_id: number
+          sender_id: number
+        }
+        Update: {
+          company_id?: number
+          content?: string
+          created_at?: string
+          id?: string
+          receiver_id?: number
+          sender_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_id_fkey"
+            columns: ["id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orientation: {
         Row: {
           created_at: string

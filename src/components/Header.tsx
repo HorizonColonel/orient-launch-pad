@@ -18,12 +18,34 @@ const Header = () => {
   const { user, profile, signOut, loading } = useAuth();
   const location = useLocation();
 
-  // Hide navigation items on My Training page
+  // Hide navigation items on My Training page and show smooth scroll nav on home
   const shouldShowNavigation = !location.pathname.includes('/my-training');
+  const isHomePage = location.pathname === '/';
 
   const handleSignOut = async () => {
     await signOut();
   };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
+    }
+  };
+
+  const navigationItems = isHomePage ? [
+    { label: "Features", action: () => scrollToSection('features') },
+    { label: "Benefits", action: () => scrollToSection('benefits') },
+    { label: "Pricing", action: () => scrollToSection('pricing') },
+    { label: "About", action: () => scrollToSection('about') },
+    { label: "Contact", action: () => scrollToSection('contact') }
+  ] : [
+    { label: "Features", href: "/features" },
+    { label: "Benefits", href: "/benefits" },
+    { label: "Pricing", href: "/pricing" },
+    { label: "Contact", href: "/contact" }
+  ];
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
@@ -40,10 +62,25 @@ const Header = () => {
 
           {shouldShowNavigation && (
             <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</Link>
-              <Link to="/benefits" className="text-gray-600 hover:text-gray-900 transition-colors">Benefits</Link>
-              <Link to="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
-              <Link to="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</Link>
+              {navigationItems.map((item, index) => (
+                <div key={index}>
+                  {item.action ? (
+                    <button 
+                      onClick={item.action}
+                      className="text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
+                    >
+                      {item.label}
+                    </button>
+                  ) : (
+                    <Link 
+                      to={item.href!} 
+                      className="text-gray-600 hover:text-gray-900 transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </div>
+              ))}
             </nav>
           )}
 
@@ -130,10 +167,26 @@ const Header = () => {
             <nav className="flex flex-col space-y-4 p-4">
               {shouldShowNavigation && (
                 <>
-                  <Link to="/features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</Link>
-                  <Link to="/benefits" className="text-gray-600 hover:text-gray-900 transition-colors">Benefits</Link>
-                  <Link to="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
-                  <Link to="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</Link>
+                  {navigationItems.map((item, index) => (
+                    <div key={index}>
+                      {item.action ? (
+                        <button 
+                          onClick={item.action}
+                          className="text-gray-600 hover:text-gray-900 transition-colors text-left w-full"
+                        >
+                          {item.label}
+                        </button>
+                      ) : (
+                        <Link 
+                          to={item.href!} 
+                          className="text-gray-600 hover:text-gray-900 transition-colors"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      )}
+                    </div>
+                  ))}
                 </>
               )}
               
@@ -149,20 +202,20 @@ const Header = () => {
                           {profile?.role?.replace('_', ' ')}
                         </span>
                       </div>
-                      <Link to="/my-training">
+                      <Link to="/my-training" onClick={() => setIsMenuOpen(false)}>
                         <Button variant="outline" className="w-full justify-start">
                           <BookOpen className="w-4 h-4 mr-2" />
                           My Training
                         </Button>
                       </Link>
-                      <Link to="/profile">
+                      <Link to="/profile" onClick={() => setIsMenuOpen(false)}>
                         <Button variant="outline" className="w-full justify-start">
                           <User className="w-4 h-4 mr-2" />
                           My Profile
                         </Button>
                       </Link>
                       {(profile?.role === 'company_admin' || profile?.role === 'employee') && profile?.company_id && (
-                        <Link to="/company">
+                        <Link to="/company" onClick={() => setIsMenuOpen(false)}>
                           <Button variant="outline" className="w-full justify-start">
                             <Building2 className="w-4 h-4 mr-2" />
                             My Company
@@ -180,12 +233,12 @@ const Header = () => {
                     </>
                   ) : (
                     <>
-                      <Link to="/auth">
+                      <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
                         <Button variant="outline" className="border-primary text-primary hover:bg-primary/5 w-full">
                           Sign In
                         </Button>
                       </Link>
-                      <Link to="/request-demo">
+                      <Link to="/request-demo" onClick={() => setIsMenuOpen(false)}>
                         <Button className="bg-primary hover:bg-primary/90 w-full">
                           Request Demo
                         </Button>
