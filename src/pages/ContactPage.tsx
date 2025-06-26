@@ -62,7 +62,7 @@ const ContactPage = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" placeholder="+90 (212) 555-0123" />
+                  <Input id="phone" placeholder="+90 (536) 728 13 41" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="employees">Number of Employees</Label>
@@ -91,16 +91,32 @@ const ContactPage = () => {
                     <Mail className="w-6 h-6 text-primary mt-1" />
                     <div>
                       <div className="font-semibold">Email</div>
-                      <div className="text-gray-600">contact@orientation.com.tr</div>
-                      <div className="text-gray-600">support@orientation.com.tr</div>
+                      <div className="text-gray-600">
+                        <a href="mailto:info@touristico.com.tr" className="hover:text-primary transition-colors">
+                          info@touristico.com.tr
+                        </a>
+                      </div>
+                      <div className="text-gray-600">
+                        <a href="mailto:hr@touristico.com.tr" className="hover:text-primary transition-colors">
+                          hr@touristico.com.tr
+                        </a>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <Phone className="w-6 h-6 text-primary mt-1" />
                     <div>
                       <div className="font-semibold">Phone</div>
-                      <div className="text-gray-600">+90 (212) 555-0123</div>
-                      <div className="text-gray-600">+90 (212) 555-0124 (Sales)</div>
+                      <div className="text-gray-600">
+                        <a href="tel:+905367281341" className="hover:text-primary transition-colors">
+                          +90 (536) 728 13 41
+                        </a>
+                      </div>
+                      <div className="text-gray-600">
+                        <a href="tel:+905356249853" className="hover:text-primary transition-colors">
+                          +90 (535) 624 98 53
+                        </a>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">

@@ -32,24 +32,34 @@ const AboutUsPage = () => {
 
   const team = [
     {
-      name: "Mehmet Özkan",
-      role: "CEO & Founder",
-      bio: "Former HR executive with 15 years of experience in employee development and organizational psychology."
+      name: "Ufuk Albay",
+      role: "Co-Founder & Chief Product Officer (CPO)",
+      bio: "Product visionary with deep expertise in user experience design and platform development for enterprise solutions."
     },
     {
-      name: "Ayşe Kılıç",
-      role: "CTO",
-      bio: "Technology leader with expertise in scalable platforms and user experience design for enterprise software."
+      name: "Öznur İleri",
+      role: "Co-Founder & Chief Operating Officer (COO)",
+      bio: "Operations leader focused on scaling business processes and ensuring exceptional customer experiences."
     },
     {
-      name: "Can Yılmaz",
-      role: "VP of Product",
-      bio: "Product strategist focused on creating intuitive, user-centered solutions for HR and learning management."
+      name: "Burak Dere",
+      role: "Lead Backend Engineer",
+      bio: "Backend architecture expert specializing in scalable systems and database optimization for high-performance applications."
     },
     {
-      name: "Zeynep Demir",
-      role: "Head of Customer Success",
-      bio: "Customer experience expert dedicated to ensuring our clients achieve their onboarding goals and maximize ROI."
+      name: "Hüseyin Emir Kara",
+      role: "Full-Stack Developer",
+      bio: "Full-stack engineer with expertise in modern web technologies and seamless frontend-backend integration."
+    },
+    {
+      name: "Deniz Eren Arıcı",
+      role: "DevOps & Infrastructure Engineer",
+      bio: "Infrastructure specialist ensuring reliable, secure, and scalable deployment environments for our platform."
+    },
+    {
+      name: "Elif Yılmaz",
+      role: "Customer Support Specialist",
+      bio: "Customer success advocate dedicated to providing exceptional support and ensuring client satisfaction."
     }
   ];
 
@@ -159,11 +169,15 @@ const AboutUsPage = () => {
                 Meet the passionate team behind Orientation.com.tr, dedicated to revolutionizing employee onboarding.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {team.map((member, index) => (
                 <Card key={index} className="text-center border-0 shadow-lg">
                   <CardHeader>
-                    <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-4"></div>
+                    <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <span className="text-2xl font-bold text-primary">
+                        {member.name.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
                     <CardTitle className="text-lg">{member.name}</CardTitle>
                     <CardDescription className="text-primary font-medium">{member.role}</CardDescription>
                   </CardHeader>

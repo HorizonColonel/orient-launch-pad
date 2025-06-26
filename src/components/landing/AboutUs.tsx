@@ -1,6 +1,6 @@
 
 import { Card } from "@/components/ui/card";
-import { Users, Target, Award, Globe } from "lucide-react";
+import { Users, Target, Award, Globe, Linkedin } from "lucide-react";
 import { motion } from "framer-motion";
 
 const AboutUs = () => {
@@ -27,6 +27,45 @@ const AboutUs = () => {
     {
       title: "Simplicity",
       description: "Complex problems deserve simple solutions. We make powerful onboarding tools accessible to everyone."
+    }
+  ];
+
+  const team = [
+    {
+      name: "Ufuk Albay",
+      role: "Co-Founder & Chief Product Officer (CPO)",
+      bio: "Product visionary with deep expertise in user experience design and platform development for enterprise solutions.",
+      linkedin: "#"
+    },
+    {
+      name: "Öznur İleri",
+      role: "Co-Founder & Chief Operating Officer (COO)",
+      bio: "Operations leader focused on scaling business processes and ensuring exceptional customer experiences.",
+      linkedin: "#"
+    },
+    {
+      name: "Burak Dere",
+      role: "Lead Backend Engineer",
+      bio: "Backend architecture expert specializing in scalable systems and database optimization for high-performance applications.",
+      linkedin: "#"
+    },
+    {
+      name: "Hüseyin Emir Kara",
+      role: "Full-Stack Developer",
+      bio: "Full-stack engineer with expertise in modern web technologies and seamless frontend-backend integration.",
+      linkedin: "#"
+    },
+    {
+      name: "Deniz Eren Arıcı",
+      role: "DevOps & Infrastructure Engineer",
+      bio: "Infrastructure specialist ensuring reliable, secure, and scalable deployment environments for our platform.",
+      linkedin: "#"
+    },
+    {
+      name: "Elif Yılmaz",
+      role: "Customer Support Specialist",
+      bio: "Customer success advocate dedicated to providing exceptional support and ensuring client satisfaction.",
+      linkedin: "#"
     }
   ];
 
@@ -102,6 +141,46 @@ const AboutUs = () => {
                 alt="Our team collaborating"
                 className="rounded-2xl shadow-2xl"
               />
+            </div>
+          </motion.div>
+
+          {/* Team Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-20"
+          >
+            <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 text-center mb-12">Meet Our Team</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {team.map((member, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <Card className="p-8 text-center hover:shadow-lg transition-shadow duration-300 border-gray-200 h-full">
+                    <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mx-auto mb-6 flex items-center justify-center">
+                      <span className="text-2xl font-bold text-primary">
+                        {member.name.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                    <h4 className="text-xl font-semibold text-gray-900 mb-2">{member.name}</h4>
+                    <p className="text-primary font-medium mb-4">{member.role}</p>
+                    <p className="text-sm text-gray-600 mb-6 leading-relaxed">{member.bio}</p>
+                    <a 
+                      href={member.linkedin} 
+                      className="inline-flex items-center justify-center w-10 h-10 bg-primary/10 rounded-full hover:bg-primary/20 transition-colors"
+                      aria-label={`${member.name} LinkedIn profile`}
+                    >
+                      <Linkedin className="w-5 h-5 text-primary" />
+                    </a>
+                  </Card>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
 

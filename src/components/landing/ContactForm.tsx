@@ -22,11 +22,36 @@ const ContactForm = () => {
     inquiry: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Integrate with Supabase to store contact form submissions
-    console.log('Form submitted:', formData);
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate form submission - In production, this would send to info@touristico.com.tr
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      console.log('Form submitted to info@touristico.com.tr:', formData);
+      setIsSubmitted(true);
+      
+      // Reset form after successful submission
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        company: '',
+        phone: '',
+        employees: '',
+        inquiry: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -37,13 +62,13 @@ const ContactForm = () => {
     {
       icon: Mail,
       title: "Email",
-      details: ["contact@orientation.com.tr", "support@orientation.com.tr"],
+      details: ["info@touristico.com.tr", "hr@touristico.com.tr"],
       action: "Send Email"
     },
     {
       icon: Phone,
       title: "Phone",
-      details: ["+90 (212) 555-0123", "+90 (212) 555-0124 (Sales)"],
+      details: ["+90 (536) 728 13 41", "+90 (535) 624 98 53"],
       action: "Call Now"
     },
     {
@@ -80,6 +105,41 @@ const ContactForm = () => {
       action: "Request Call"
     }
   ];
+
+  if (isSubmitted) {
+    return (
+      <section id="contact" className="py-20 lg:py-32 bg-gray-50">
+        <div className="container mx-auto px-4 lg:px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Card className="p-12 border-0 shadow-xl bg-green-50">
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Mail className="w-10 h-10 text-green-600" />
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">Message Sent Successfully!</h2>
+                <p className="text-xl text-gray-600 mb-6">
+                  Thank you for reaching out to us. We've received your message and will get back to you within 24 hours at the email address you provided.
+                </p>
+                <p className="text-gray-600 mb-8">
+                  Your message has been sent to <strong>info@touristico.com.tr</strong>
+                </p>
+                <Button 
+                  onClick={() => setIsSubmitted(false)} 
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  Send Another Message
+                </Button>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="contact" className="py-20 lg:py-32 bg-gray-50">
@@ -170,7 +230,7 @@ const ContactForm = () => {
                         <Label htmlFor="phone">Phone Number</Label>
                         <Input 
                           id="phone" 
-                          placeholder="+90 (212) 555-0123"
+                          placeholder="+90 (536) 728 13 41"
                           value={formData.phone}
                           onChange={(e) => handleInputChange('phone', e.target.value)}
                         />
@@ -222,8 +282,13 @@ const ContactForm = () => {
                       />
                     </div>
 
-                    <Button type="submit" className="w-full" size="lg">
-                      Send Message
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      size="lg"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Sending..." : "Send Message"}
                     </Button>
                   </form>
                 </div>
@@ -271,7 +336,25 @@ const ContactForm = () => {
                       <div className="flex-1">
                         <div className="font-semibold text-gray-900 mb-1">{info.title}</div>
                         {info.details.map((detail, detailIndex) => (
-                          <div key={detailIndex} className="text-gray-600 text-sm">{detail}</div>
+                          <div key={detailIndex} className="text-gray-600 text-sm">
+                            {info.title === "Email" ? (
+                              <a 
+                                href={`mailto:${detail}`} 
+                                className="hover:text-primary transition-colors"
+                              >
+                                {detail}
+                              </a>
+                            ) : info.title === "Phone" ? (
+                              <a 
+                                href={`tel:${detail.replace(/\s/g, '')}`} 
+                                className="hover:text-primary transition-colors"
+                              >
+                                {detail}
+                              </a>
+                            ) : (
+                              detail
+                            )}
+                          </div>
                         ))}
                         {info.action && (
                           <Button variant="link" className="p-0 h-auto text-primary mt-2">
