@@ -2,7 +2,6 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
-import Header from '@/components/Header';
 import MyTrainingDashboard from '@/components/training/MyTrainingDashboard';
 import PageTransition from '@/components/PageTransition';
 
@@ -23,10 +22,7 @@ const MyTrainingPage = () => {
 
   return (
     <PageTransition className="min-h-screen bg-background">
-      <Header />
-      <main className="pt-16">
-        <MyTrainingDashboard />
-      </main>
+      <MyTrainingDashboard />
     </PageTransition>
   );
 };

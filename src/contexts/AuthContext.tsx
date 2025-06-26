@@ -57,9 +57,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             fetchUserProfile(session.user.id);
           }, 0);
           
-          // Redirect to My Training page after successful login
+          // Redirect to Dashboard page after successful login
           if (event === 'SIGNED_IN' && window.location.pathname === '/auth') {
-            window.location.href = '/my-training';
+            window.location.href = '/dashboard';
           }
         } else {
           setProfile(null);

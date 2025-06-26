@@ -2,7 +2,6 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
-import Header from '@/components/Header';
 import CompanyDashboard from '@/components/company/CompanyDashboard';
 import PageTransition from '@/components/PageTransition';
 
@@ -27,10 +26,7 @@ const CompanyPage = () => {
 
   return (
     <PageTransition className="min-h-screen bg-background">
-      <Header />
-      <main className="pt-16">
-        <CompanyDashboard />
-      </main>
+      <CompanyDashboard />
     </PageTransition>
   );
 };
