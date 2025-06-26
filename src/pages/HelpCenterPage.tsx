@@ -3,29 +3,29 @@ import React from 'react';
 import PageTransition from '@/components/PageTransition';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { help-circle, file-text, settings, users } from 'lucide-react';
+import { HelpCircle, FileText, Settings, Users } from 'lucide-react';
 
 const HelpCenterPage = () => {
   const helpTopics = [
     {
       title: 'Getting Started',
       description: 'Learn the basics of using the platform',
-      icon: help-circle,
+      icon: HelpCircle,
     },
     {
       title: 'Training Management',
       description: 'How to create and assign training modules',
-      icon: file-text,
+      icon: FileText,
     },
     {
       title: 'Account Settings',
       description: 'Manage your profile and preferences',
-      icon: settings,
+      icon: Settings,
     },
     {
       title: 'User Management',
       description: 'Add and manage team members',
-      icon: users,
+      icon: Users,
     },
   ];
 

@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { book, users, dashboard, clock } from 'lucide-react';
+import { Book, Users, LayoutDashboard, Clock } from 'lucide-react';
 import PageTransition from '@/components/PageTransition';
 
 const DashboardPage = () => {
@@ -15,21 +15,21 @@ const DashboardPage = () => {
       title: 'Active Trainings',
       value: '3',
       description: 'In progress',
-      icon: book,
+      icon: Book,
       color: 'text-blue-600',
     },
     {
       title: 'Completed',
       value: '12',
       description: 'This month',
-      icon: dashboard,
+      icon: LayoutDashboard,
       color: 'text-green-600',
     },
     {
       title: 'Hours Trained',
       value: '24.5',
       description: 'Total time',
-      icon: clock,
+      icon: Clock,
       color: 'text-purple-600',
     },
   ];
@@ -39,21 +39,21 @@ const DashboardPage = () => {
       title: 'Total Employees',
       value: '156',
       description: 'Active users',
-      icon: users,
+      icon: Users,
       color: 'text-blue-600',
     },
     {
       title: 'Training Modules',
       value: '28',
       description: 'Available',
-      icon: book,
+      icon: Book,
       color: 'text-green-600',
     },
     {
       title: 'Completion Rate',
       value: '87%',
       description: 'This quarter',
-      icon: dashboard,
+      icon: LayoutDashboard,
       color: 'text-purple-600',
     },
   ];

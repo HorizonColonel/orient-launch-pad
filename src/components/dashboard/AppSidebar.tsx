@@ -16,16 +16,16 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 import {
-  dashboard,
-  book,
-  settings,
-  users,
-  user,
-  briefcase,
-  help-circle,
-  file-text,
-  bell,
-  log-out,
+  LayoutDashboard,
+  Book,
+  Settings,
+  Users,
+  User,
+  Briefcase,
+  HelpCircle,
+  FileText,
+  Bell,
+  LogOut,
 } from 'lucide-react';
 
 export function AppSidebar() {
@@ -36,31 +36,31 @@ export function AppSidebar() {
     {
       title: 'Dashboard',
       url: '/dashboard',
-      icon: dashboard,
+      icon: LayoutDashboard,
       description: 'Overview and metrics',
     },
     {
       title: 'My Trainings',
       url: '/my-training',
-      icon: book,
+      icon: Book,
       description: 'Your assigned trainings',
     },
     ...(isCompanyAdmin ? [{
       title: 'Manage Trainings',
       url: '/manage-trainings',
-      icon: settings,
+      icon: Settings,
       description: 'Create and assign trainings',
     }] : []),
     {
       title: 'Company',
       url: '/company',
-      icon: briefcase,
+      icon: Briefcase,
       description: 'Company resources',
     },
     ...(isCompanyAdmin ? [{
       title: 'Team Management',
       url: '/team-management',
-      icon: users,
+      icon: Users,
       description: 'Manage team members',
     }] : []),
   ];
@@ -69,13 +69,13 @@ export function AppSidebar() {
     {
       title: 'My Profile',
       url: '/profile',
-      icon: user,
+      icon: User,
       description: 'Personal information',
     },
     {
       title: 'Account Settings',
       url: '/account-settings',
-      icon: settings,
+      icon: Settings,
       description: 'Security and preferences',
     },
   ];
@@ -84,13 +84,13 @@ export function AppSidebar() {
     {
       title: 'Help Center',
       url: '/help',
-      icon: help-circle,
+      icon: HelpCircle,
       description: 'Get assistance',
     },
     {
       title: 'Documentation',
       url: '/docs',
-      icon: file-text,
+      icon: FileText,
       description: 'Platform guides',
     },
   ];
@@ -99,19 +99,19 @@ export function AppSidebar() {
     {
       title: 'User Access Control',
       url: '/admin/users',
-      icon: users,
+      icon: Users,
       description: 'Manage user permissions',
     },
     {
       title: 'Training Analytics',
       url: '/admin/analytics',
-      icon: dashboard,
+      icon: LayoutDashboard,
       description: 'Performance insights',
     },
     {
       title: 'HR Notifications',
       url: '/admin/notifications',
-      icon: bell,
+      icon: Bell,
       description: 'System alerts',
     },
   ] : [];
@@ -237,7 +237,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton onClick={signOut} tooltip="Sign out">
-              <log-out className="w-4 h-4" />
+              <LogOut className="w-4 h-4" />
               <span>Sign Out</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
