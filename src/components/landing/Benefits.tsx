@@ -1,6 +1,6 @@
 
 import { Card } from "@/components/ui/card";
-import { TrendingUp, Clock, DollarSign, Award, Users, Target } from "lucide-react";
+import { TrendingUp, Clock, DollarSign, Award, Users, Target, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Benefits = () => {
